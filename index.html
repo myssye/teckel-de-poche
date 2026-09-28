@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teckel de Poche</title>
+<meta name="description" content="Prends soin de Saucisse, un teckel tout doux.">
+<meta name="theme-color" content="#5A3B2C">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Teckel">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="css/game.css?v=4.0.0">
+</head>
+<body>
+<div class="phone" id="phone">
+  <div class="toast" id="toast"></div>
+
+  <div class="topbar" id="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9c0-1.5 1-3 3-3 1.2 0 2 .6 2.5 1.3C10 6.5 11 6 12 6s2 .5 2.5 1.3C15 6.6 15.8 6 17 6c2 0 3 1.5 3 3 0 4-4 5-4 9H8c0-4-4-5-4-9Z"/><circle cx="9.5" cy="10.5" r=".6" fill="currentColor"/><circle cx="14.5" cy="10.5" r=".6" fill="currentColor"/></svg>
+        Teckel de Poche
+      </div>
+      <div class="pill" style="color:var(--amber);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10.2c0-1.1 1-2 2.5-2s2.5.7 2.5 1.7c0 2.3-5 1.3-5 3.6 0 1 1.1 1.7 2.5 1.7s2.5-.9 2.5-2"/></svg>
+        <span id="coinCount">0</span>
+      </div>
+    </div>
+    <div class="needs-strip">
+      <div class="need-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v6a3 3 0 0 0 3 3v9M9 3v9M12 3v6a3 3 0 0 1-3 3M18 3c-1.5 3-1.5 9 0 12v6"/></svg>
+        <div class="need-track"><div class="need-fill" id="fillFaim" style="background:var(--amber)"></div></div>
+      </div>
+      <div class="need-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-4 3 8 2-5 2 3h5"/></svg>
+        <div class="need-track"><div class="need-fill" id="fillSommeil" style="background:#8FA6E8"></div></div>
+      </div>
+      <div class="need-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="7"/><path d="M12 8v4l3 2"/></svg>
+        <div class="need-track"><div class="need-fill" id="fillJeu" style="background:var(--accent)"></div></div>
+      </div>
+      <div class="need-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c3 4 6 7.2 6 10.5A6 6 0 0 1 6 13.5C6 10.2 9 7 12 3Z"/></svg>
+        <div class="need-track"><div class="need-fill" id="fillProprete" style="background:var(--mint)"></div></div>
+      </div>
+    </div>
+    <div class="sagesse-row">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8c0 5-6 9-6 9s-6-4-6-9a4 4 0 0 1 6-3.5A4 4 0 0 1 18 8Z"/></svg>
+      <div class="sagesse-label">Sagesse</div>
+      <div class="sagesse-track"><div class="sagesse-fill" id="fillSagesse" style="background:var(--mint);width:100%"></div></div>
+    </div>
+  </div>
+
+  <!-- HOME : pièces en décor figé -->
+  <div class="view active" id="view-home">
+    <div class="room-frame" id="roomFrame">
+      <img class="room-bg" id="roomBg" src="" alt="Décor de la pièce">
+      <div class="room-shade" id="roomShade"></div>
+
+      <div class="room-topcontrols">
+        <div class="room-switcher" id="roomSwitcher">
+          <button class="room-tab" data-room="cuisine" title="Cuisine">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v6a3 3 0 0 0 3 3v9M9 3v9M12 3v6a3 3 0 0 1-3 3M18 3c-1.5 3-1.5 9 0 12v6"/></svg>
+          </button>
+          <button class="room-tab" data-room="chambre" title="Chambre">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="7"/><path d="M12 8v4l3 2"/></svg>
+          </button>
+          <button class="room-tab" data-room="salon" title="Salon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+          </button>
+          <button class="room-tab" data-room="salledebain" title="Salle de bain">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3c3 4 6 7.2 6 10.5A6 6 0 0 1 6 13.5C6 10.2 9 7 12 3Z"/></svg>
+          </button>
+        </div>
+        <button class="daynight-btn" id="daynightBtn" title="Jour / nuit">
+          <svg id="daynightIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+        </button>
+      </div>
+      <div class="room-label-badge" id="roomLabel">Cuisine</div>
+
+      <div class="thought-bubble" id="thoughtBubble" style="left:50%;top:70%;">…</div>
+      <div class="dog-sprite" id="dogSprite" style="left:19%;bottom:12%;width:42%;">
+        <img id="dogImg" src="" alt="Ton teckel">
+      </div>
+      <img class="bath-dog" id="bathDog" src="assets/dog_bain.png" alt="Teckel dans le bain">
+
+      <div class="hotspots" id="hotspots"></div>
+
+      <div class="walk-zone left" id="zoneLeft"></div>
+      <div class="walk-zone right" id="zoneRight"></div>
+      <div class="walk-hint left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></div>
+      <div class="walk-hint right"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
+
+      <div class="hint-toast" id="hintToast">Maintiens à gauche ou à droite pour marcher</div>
+    </div>
+  </div>
+
+  <!-- MISSIONS : tiroir par-dessus la home -->
+  <div class="missions-backdrop" id="missionsBackdrop"></div>
+  <div class="missions-drawer" id="missionsDrawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-header">
+      <div class="panel-title" style="margin:0;">Missions</div>
+      <button class="drawer-close" id="missionsCloseBtn" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="scroll-area">
+      <div class="daily-head"><span class="panel-title">Défis du jour</span><span class="daily-bonus" id="dailyBonus"></span></div>
+      <div id="dailyList"></div>
+      <div class="panel-title besoins-title">Besoins</div>
+      <div id="missionList"></div>
+    </div>
+  </div>
+
+  <!-- DRESSING -->
+  <div class="view" id="view-dressing">
+    <div class="scroll-area">
+      <div class="panel-title">Showroom</div>
+      <div class="showroom">
+        <div class="rack"></div>
+        <div class="showroom-dog"><img id="dressingImg" src="" alt="Aperçu tenue"></div>
+      </div>
+      <div class="panel-title">Tenues</div>
+      <div class="outfit-grid" id="outfitGrid"></div>
+    </div>
+  </div>
+
+  <!-- COFFRE -->
+  <div class="view" id="view-coffre">
+    <div class="coffre-wrap">
+      <div class="chest">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="11" rx="2"/><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M12 12v4M9 12h6"/></svg>
+      </div>
+      <div>
+        <div class="panel-title" style="text-align:center;">Coffre-fort quotidien</div>
+        <div class="coffre-note" id="coffreNote">Reviens chaque jour pour une récompense surprise.</div>
+      </div>
+      <div class="reward-flash" id="rewardFlash"></div>
+      <button class="coffre-cta" id="coffreBtn">Ouvrir le coffre</button>
+    </div>
+  </div>
+
+  <!-- PLUS (menu) -->
+  <div class="view" id="view-plus">
+    <div class="scroll-area">
+      <div class="panel-title">Plus</div>
+      <button class="plus-item" id="plusFiche">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8c0 5-6 9-6 9s-6-4-6-9a4 4 0 0 1 6-3.5A4 4 0 0 1 18 8Z"/></svg>
+        <span><b id="plusFicheName">Fiche</b><small>Nom, complicité, personnalité</small></span>
+      </button>
+      <button class="plus-item" id="plusSave">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>
+        <span><b>Sauvegarde</b><small>Exporter ou importer ta partie</small></span>
+      </button>
+      <div class="plus-item soon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
+        <span><b>Album photo</b><small>Bientôt</small></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHE DU CHIEN -->
+  <div class="view" id="view-fiche">
+    <div class="scroll-area">
+      <button class="back-btn" data-back="plus">‹ Plus</button>
+      <div class="glass-card fiche-head">
+        <div class="fiche-title" id="ficheTitle">Saucisse</div>
+        <div class="fiche-rename">
+          <input id="ficheName" type="text" autocomplete="off" aria-label="Nom du chien">
+          <button class="mission-btn" id="ficheRename">Renommer</button>
+        </div>
+      </div>
+      <div class="glass-card">
+        <div class="panel-title">Complicité</div>
+        <div class="fiche-level" id="ficheLevel">Niveau 1</div>
+        <div class="daily-bar big"><div id="ficheXp"></div></div>
+        <div class="fiche-small" id="ficheXpText"></div>
+        <div class="fiche-small" id="ficheStats"></div>
+      </div>
+      <div class="glass-card">
+        <div class="panel-title">Personnalité</div>
+        <div class="fiche-trait" id="ficheTrait"></div>
+        <div id="ficheTraits"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAUVEGARDE -->
+  <div class="view" id="view-sauvegarde">
+    <div class="scroll-area">
+      <button class="back-btn" data-back="plus">‹ Plus</button>
+      <div class="glass-card">
+        <div class="panel-title">Exporter</div>
+        <div class="fiche-small">Garde ce code précieusement (notes, message à toi-même). Il permet de retrouver ta partie sur un autre appareil ou après un nettoyage du navigateur.</div>
+        <textarea id="exportCode" readonly rows="4"></textarea>
+        <button class="mission-btn" id="exportCopy">Copier le code</button>
+      </div>
+      <div class="glass-card">
+        <div class="panel-title">Importer</div>
+        <div class="fiche-small">Colle un code de sauvegarde. Attention : la partie actuelle sera remplacée.</div>
+        <textarea id="importCode" rows="4" placeholder="TDP4-..."></textarea>
+        <div class="import-error" id="importError"></div>
+        <button class="mission-btn" id="importBtn">Importer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <button class="nav-btn active" data-view="home" aria-label="Maison">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9"/></svg>
+      <span class="nav-label">Maison</span>
+    </button>
+    <button class="nav-btn" data-view="missions" aria-label="Missions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10l2 2 4-4"/><path d="M8 16h8"/></svg>
+      <span class="nav-label">Missions</span>
+      <span class="nav-dot" id="missionDot" hidden></span>
+    </button>
+    <button class="nav-btn" data-view="dressing" aria-label="Dressing">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4a2.5 2.5 0 0 1 2.5 2.5H21l-3 4H6L3 6.5h6.5A2.5 2.5 0 0 1 12 4Z"/><path d="M6 10.5V20h12v-9.5"/></svg>
+      <span class="nav-label">Dressing</span>
+    </button>
+    <button class="nav-btn" data-view="coffre" aria-label="Coffre">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="9" width="18" height="11" rx="2"/><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2M12 12v4M9 12h6"/></svg>
+      <span class="nav-label">Coffre</span>
+      <span class="nav-dot" id="coffreDot" hidden></span>
+    </button>
+    <button class="nav-btn" data-view="plus" aria-label="Plus">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="6" cy="12" r="0.8"/><circle cx="12" cy="12" r="0.8"/><circle cx="18" cy="12" r="0.8"/></svg>
+      <span class="nav-label">Plus</span>
+    </button>
+  </div>
+</div>
+
+
+<script src="js/data.js?v=4.0.0"></script>
+<script src="js/save.js?v=4.0.0"></script>
+<script src="js/game.js?v=4.0.0"></script>
+<script src="js/features/complicite.js?v=4.0.0"></script>
+<script src="js/features/dailies.js?v=4.0.0"></script>
+<script src="js/ui/plus.js?v=4.0.0"></script>
+<script src="js/main.js?v=4.0.0"></script>
+</body>
+</html>

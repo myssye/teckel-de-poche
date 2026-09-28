@@ -1,0 +1,468 @@
+  :root{
+    --bg:#FFF6EC;
+    --surface:#FFFFFF;
+    --surface-2:#FFF0DF;
+    --text:#4A2E22;
+    --text-soft:#8C6C58;
+    --accent:#E8749A;
+    --accent-soft:#FBDCE6;
+    --accent-strong:#D85C84;
+    --mint:#5FAE82;
+    --mint-soft:#DDF0E2;
+    --amber:#EFA93F;
+    --amber-soft:#FBEBD2;
+    --border:#F1DCC7;
+    --danger:#D96A5A;
+    --shadow: 0 10px 24px -12px rgba(74,46,34,0.28);
+    --overlay: rgba(74,46,34,0.55);
+    /* verre facon "Liquid Glass" (barre du haut, boutons flottants) */
+    --glass-bg: rgba(255,250,244,0.46);
+    --glass-bg-strong: rgba(255,250,244,0.6);
+    --glass-edge: rgba(255,255,255,0.55);
+    --glass-shine: rgba(255,255,255,0.85);
+    --glass-track: rgba(255,255,255,0.35);
+    --glass-shadow: 0 10px 30px -10px rgba(74,46,34,0.35);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#241811; --surface:#32241B; --surface-2:#3B2B20;
+      --text:#F5E7DB; --text-soft:#C9A991;
+      --accent:#F08CAE; --accent-soft:#4A2F3A; --accent-strong:#F5A5C0;
+      --mint:#7FCB9E; --mint-soft:#25392D;
+      --amber:#F0B95E; --amber-soft:#3D3220;
+      --border:#4A3626; --danger:#E38A7B;
+      --shadow: 0 10px 24px -12px rgba(0,0,0,0.5);
+      --overlay: rgba(0,0,0,0.6);
+      --glass-bg: rgba(40,26,18,0.28); --glass-bg-strong: rgba(60,40,28,0.45);
+      --glass-edge: rgba(255,255,255,0.18); --glass-shine: rgba(255,255,255,0.35);
+      --glass-track: rgba(0,0,0,0.25); --glass-shadow: 0 10px 30px -10px rgba(0,0,0,0.6);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#241811; --surface:#32241B; --surface-2:#3B2B20;
+    --text:#F5E7DB; --text-soft:#C9A991;
+    --accent:#F08CAE; --accent-soft:#4A2F3A; --accent-strong:#F5A5C0;
+    --mint:#7FCB9E; --mint-soft:#25392D;
+    --amber:#F0B95E; --amber-soft:#3D3220;
+    --border:#4A3626; --danger:#E38A7B;
+    --shadow: 0 10px 24px -12px rgba(0,0,0,0.5);
+    --overlay: rgba(0,0,0,0.6);
+    --glass-bg: rgba(40,26,18,0.28); --glass-bg-strong: rgba(60,40,28,0.45);
+    --glass-edge: rgba(255,255,255,0.18); --glass-shine: rgba(255,255,255,0.35);
+    --glass-track: rgba(0,0,0,0.25); --glass-shadow: 0 10px 30px -10px rgba(0,0,0,0.6);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Nunito',system-ui,sans-serif;
+    display:flex; justify-content:center;
+    padding-inline:16px; padding-block:24px;
+  }
+  h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; text-wrap:balance; }
+
+  .phone{
+    width:100%; max-width:420px;
+    background:var(--surface);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    height:min(800px, calc(100vh - 48px));
+    position:relative;
+  }
+
+  /* ---- verre facon Apple "Liquid Glass" ----
+     fond tres translucide + flou fort + saturation, liseré clair, reflet speculaire en haut
+     (ombre interne blanche) et halo diagonal via ::before. Partage par la barre du haut,
+     les controles de piece et les boutons du bas. */
+  .topbar, .room-switcher, .daynight-btn, .room-label-badge, .nav-btn{
+    background: var(--glass-bg);
+    backdrop-filter: blur(22px) saturate(190%) brightness(1.06);
+    -webkit-backdrop-filter: blur(22px) saturate(190%) brightness(1.06);
+    border:1px solid var(--glass-edge);
+    box-shadow:
+      inset 0 1px 0 var(--glass-shine),
+      inset 0 -1px 1px rgba(255,255,255,0.12),
+      inset 0 0 18px rgba(255,255,255,0.10),
+      var(--glass-shadow);
+  }
+  .topbar::before, .room-switcher::before, .daynight-btn::before, .nav-btn::before{
+    content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    background: linear-gradient(140deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0) 38%,
+                rgba(255,255,255,0) 70%, rgba(255,255,255,0.14) 100%);
+    mix-blend-mode: soft-light;
+  }
+  .room-switcher, .daynight-btn{ position:relative; }
+  .room-tab, .daynight-btn svg, .nav-btn svg{ position:relative; }
+
+  .topbar{
+    position:absolute; top:8px; left:8px; right:8px; z-index:16;
+    top: max(8px, env(safe-area-inset-top,0px));
+    padding:11px 14px 10px;
+    border-radius:26px;
+  }
+  .topbar > *{ position:relative; }
+  .topbar-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
+  .brand{ display:flex; align-items:center; gap:8px; font-size:18px; font-weight:800; color:var(--accent-strong); }
+  .brand svg{width:20px;height:20px;flex:none;}
+  .pill{ display:flex; align-items:center; gap:6px; background:var(--glass-bg-strong); border:1px solid var(--glass-edge); box-shadow: inset 0 1px 0 var(--glass-shine); border-radius:999px; padding:5px 10px 5px 6px; font-weight:800; font-size:13px; font-variant-numeric: tabular-nums; }
+  .pill svg{width:17px;height:17px;flex:none;}
+  .needs-strip{ display:flex; gap:10px; }
+  .need-chip{ flex:1; display:flex; align-items:center; gap:5px; }
+  .need-chip svg{width:14px;height:14px;flex:none;color:var(--text-soft);}
+  .need-track{ flex:1; height:6px; background:var(--glass-track); border-radius:99px; overflow:hidden; border:1px solid var(--glass-edge); }
+  .need-fill{ height:100%; border-radius:99px; transition:width .4s ease; }
+  .sagesse-row{ display:flex; align-items:center; gap:8px; margin-top:7px; }
+  .sagesse-row svg{width:15px;height:15px;flex:none;color:var(--text-soft);}
+  .sagesse-label{font-size:11px;color:var(--text-soft);font-weight:800;width:52px;flex:none;}
+  .sagesse-track{ flex:1; height:7px; background:var(--glass-track); border-radius:99px; overflow:hidden; border:1px solid var(--glass-edge); }
+  .sagesse-fill{ height:100%; border-radius:99px; transition:width .4s ease, background .4s ease; }
+
+  .view{display:none; flex:1; min-height:0; flex-direction:column;}
+  .view.active{display:flex;}
+
+  /* ---- room scene ---- */
+  #view-home{ position:relative; }
+  .room-frame{
+    position:relative; flex:1; min-height:0;
+    margin:0;
+    overflow:hidden;
+    background:var(--surface-2);
+  }
+  .room-bg{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:center 30%;
+    transition:opacity .16s ease;
+    display:block;
+  }
+  .room-bg.fading{ opacity:0; }
+  .room-shade{
+    position:absolute; inset:0;
+    background:var(--overlay);
+    opacity:0;
+    transition:opacity .3s ease;
+    pointer-events:none;
+  }
+  .room-shade.on{ opacity:1; }
+
+  .walk-zone{ position:absolute; top:0; bottom:0; width:50%; z-index:6; touch-action:none; }
+  .walk-zone.left{ left:0; }
+  .walk-zone.right{ right:0; }
+  .walk-hint{
+    position:absolute; bottom:calc(80px + env(safe-area-inset-bottom, 0px));
+    width:30px; height:30px;
+    border-radius:50%;
+    background:color-mix(in srgb, var(--surface) 55%, transparent);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text); opacity:.7;
+    pointer-events:none;
+    z-index:6;
+  }
+  .walk-hint svg{width:16px;height:16px;}
+  .walk-hint.left{ left:10px; }
+  .walk-hint.right{ right:10px; }
+  .walk-zone.pressed ~ .walk-hint{ opacity:1; }
+
+  .room-topcontrols{
+    position:absolute; top:calc(var(--topbar-h, 96px) + 10px); left:10px; right:10px;
+    display:flex; align-items:center; justify-content:space-between;
+    z-index:8; gap:8px;
+  }
+  .room-switcher{
+    display:flex; gap:6px;
+    border-radius:16px;
+    padding:4px;
+  }
+  .room-tab{
+    width:32px; height:32px;
+    border-radius:10px;
+    border:none;
+    background:transparent;
+    color:var(--text-soft);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .room-tab svg{width:17px;height:17px;}
+  .room-tab.active{ background:var(--accent); color:#fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 4px 10px -4px var(--accent-strong); }
+  .daynight-btn{
+    width:36px; height:36px; flex:none;
+    border-radius:50%;
+    color:var(--amber);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .daynight-btn svg{width:19px;height:19px;}
+
+  .room-label-badge{
+    position:absolute; top:calc(var(--topbar-h, 96px) + 52px); left:10px;
+    border-radius:11px;
+    padding:4px 10px;
+    font-family:'Baloo 2';
+    font-weight:700;
+    font-size:13px;
+    z-index:7;
+  }
+
+  .thought-bubble{
+    position:absolute;
+    transform:translateX(-50%);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:6px 11px;
+    font-size:12px; font-weight:700; color:var(--text);
+    white-space:nowrap;
+    box-shadow:0 4px 10px -6px rgba(74,46,34,0.3);
+    pointer-events:none; z-index:9;
+  }
+  .dog-sprite{
+    position:absolute; pointer-events:none; z-index:8;
+    transform:translateX(-50%);          /* left = centre du chien (posX) */
+    transition:width .3s ease, bottom .3s ease;   /* saut sur un meuble : taille + hauteur en douceur */
+    aspect-ratio:500 / 281;   /* proportions reelles du PNG -> hauteur deterministe */
+  }
+  .dog-sprite img{ width:100%; height:100%; object-fit:contain; object-position:bottom center; filter:drop-shadow(0 6px 8px rgba(0,0,0,0.35)); display:block; transition:transform .25s ease; }
+  .dog-sprite.face-left img{ transform:scaleX(-1); }
+  .dog-sprite.acting-faim img{ transform:translateY(10%) scaleY(0.86); transform-origin:bottom center; }
+  .dog-sprite.acting-faim.face-left img{ transform:translateY(10%) scaleY(0.86) scaleX(-1); }
+  /* geste "mordiller" (chaussons, bêtises manuelles) */
+  .dog-sprite.acting-bite img{ animation:dogBite .5s ease-in-out infinite; transform-origin:bottom center; }
+  @keyframes dogBite{ 0%,100%{ transform:rotate(0deg); } 50%{ transform:rotate(-8deg) translateY(4%); } }
+  .dog-sprite.acting-bite.face-left img{ animation:dogBiteL .5s ease-in-out infinite; }
+  @keyframes dogBiteL{ 0%,100%{ transform:scaleX(-1) rotate(0deg); } 50%{ transform:scaleX(-1) rotate(-8deg) translateY(4%); } }
+
+  /* teckel dans la baignoire (tête + mousse qui dépasse) */
+  .bath-dog{
+    position:absolute; left:48%; bottom:45%;
+    width:33%; transform:translateX(-50%);
+    z-index:9; display:none; pointer-events:none;
+    filter:drop-shadow(0 6px 8px rgba(0,0,0,0.3));
+    animation:bathBob 2.2s ease-in-out infinite;
+  }
+  .bath-dog.on{ display:block; }
+  @keyframes bathBob{ 0%,100%{ transform:translateX(-50%) translateY(0); } 50%{ transform:translateX(-50%) translateY(-3%); } }
+
+  /* zones tactiles sur les objets du décor */
+  .hotspots{ position:absolute; inset:0; z-index:7; pointer-events:none; }
+  .hotspot{
+    position:absolute; transform:translate(-50%,-50%);
+    pointer-events:auto; cursor:pointer;
+    border-radius:16px;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .hotspot:active{ background:color-mix(in srgb, var(--accent) 18%, transparent); }
+
+  .hint-toast{
+    position:absolute; top:calc(var(--topbar-h, 96px) + 52px); left:50%; transform:translateX(-50%);
+    background:var(--text); color:var(--bg);
+    font-size:11.5px; font-weight:700;
+    padding:6px 12px; border-radius:11px;
+    z-index:11; white-space:nowrap; opacity:.92;
+  }
+
+  .scroll-area{ flex:1; overflow-y:auto; padding:14px 16px calc(86px + env(safe-area-inset-bottom, 0px)); display:flex; flex-direction:column; gap:10px; }
+  .view .scroll-area{ padding-top: calc(var(--topbar-h, 96px) + 14px); }
+  .panel-title{ font-size:13px; font-weight:800; color:var(--text-soft); text-transform:uppercase; letter-spacing:.06em; }
+
+  .mission-card{ display:flex; align-items:center; gap:12px; background:var(--surface-2); border:1px solid var(--border); border-radius:16px; padding:12px; }
+  .mission-card.urgent{ border-color:var(--danger); background:color-mix(in srgb, var(--danger) 10%, var(--surface-2)); }
+  .mission-icon{ width:42px;height:42px;flex:none; border-radius:12px; display:flex;align-items:center;justify-content:center; background:var(--accent-soft); color:var(--accent-strong); }
+  .mission-icon svg{width:22px;height:22px;}
+  .mission-body{flex:1;min-width:0;}
+  .mission-title{font-weight:800;font-size:14px;}
+  .mission-sub{font-size:12px;color:var(--text-soft);margin-top:1px;}
+  .mission-btn{ flex:none; background:var(--accent); color:#fff; border:none; border-radius:11px; padding:9px 14px; font-family:'Nunito'; font-weight:800; font-size:13px; cursor:pointer; }
+  .mission-btn:disabled{background:var(--border);color:var(--text-soft);cursor:default;}
+  .mission-btn.repair{background:var(--mint);}
+  .empty-note{ text-align:center; color:var(--text-soft); font-size:13px; font-weight:700; padding:24px 12px; }
+
+  .showroom{ border-radius:18px; background:linear-gradient(180deg, var(--accent-soft) 0%, var(--surface-2) 100%); border:1px solid var(--border); padding:14px; display:flex; flex-direction:column; align-items:center; gap:6px; position:relative; overflow:hidden; }
+  .rack{ position:absolute; top:10px;left:14px;right:14px; height:2px; background:var(--accent); opacity:.35; border-radius:2px; }
+  .showroom-dog{ width:100%; max-width:220px; aspect-ratio:16/10; display:flex; align-items:center; justify-content:center; }
+  .showroom-dog img{ max-width:100%; max-height:100%; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(74,46,34,0.22)); }
+  .outfit-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:0 16px 4px; }
+  .outfit-card{ display:flex; flex-direction:column; align-items:center; gap:6px; padding:10px 6px; border-radius:16px; border:2px solid var(--border); background:var(--surface-2); cursor:pointer; }
+  .outfit-card.selected{border-color:var(--accent); background:var(--accent-soft);}
+  .outfit-card img{width:100%;max-width:74px;object-fit:contain;}
+  .outfit-card span{font-size:11px;font-weight:800;text-align:center;}
+
+  .coffre-wrap{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:24px; padding-top:calc(var(--topbar-h, 96px) + 24px); padding-bottom:calc(86px + env(safe-area-inset-bottom, 0px)); text-align:center; }
+  .chest{ width:130px;height:130px; border-radius:24px; background:linear-gradient(160deg, var(--amber-soft), var(--amber)); border:2px solid var(--border); display:flex;align-items:center;justify-content:center; box-shadow: var(--shadow); }
+  .chest svg{width:70px;height:70px;color:var(--surface);}
+  .coffre-cta{ background:var(--accent); color:#fff; border:none; border-radius:14px; padding:14px 28px; font-family:'Nunito'; font-weight:800; font-size:15px; cursor:pointer; box-shadow: 0 8px 16px -8px var(--accent-strong); }
+  .coffre-cta:disabled{ background:var(--border); color:var(--text-soft); box-shadow:none; cursor:default; }
+  .coffre-note{font-size:13px;color:var(--text-soft);font-weight:700;max-width:260px;}
+  .reward-flash{ font-family:'Baloo 2'; font-weight:700; font-size:20px; color:var(--mint); min-height:28px; }
+
+  .missions-backdrop{
+    position:absolute; inset:0; background:var(--overlay);
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:38;
+  }
+  .missions-backdrop.on{ opacity:1; pointer-events:auto; }
+  .missions-drawer{
+    position:absolute; left:0; right:0; bottom:0;
+    max-height:78%;
+    background:var(--surface);
+    border-radius:22px 22px 0 0;
+    border:1px solid var(--border); border-bottom:none;
+    box-shadow: 0 -12px 30px -14px rgba(0,0,0,0.35);
+    transform:translateY(100%);
+    transition:transform .32s cubic-bezier(.32,.72,0,1);
+    z-index:39;
+    display:flex; flex-direction:column;
+  }
+  .missions-drawer.open{ transform:translateY(0); }
+  .drawer-handle{ width:36px; height:4px; border-radius:99px; background:var(--border); margin:10px auto 4px; flex:none; }
+  .drawer-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:6px 16px 10px; flex:none;
+  }
+  .drawer-close{
+    width:30px; height:30px; border-radius:50%;
+    border:1px solid var(--border); background:var(--surface-2);
+    color:var(--text-soft); display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .drawer-close svg{width:16px;height:16px;}
+  .missions-drawer .scroll-area{ padding-top:0; }
+
+  .navbar{
+    position:absolute; left:0; right:0; bottom:0; z-index:20;
+    display:flex; justify-content:center; align-items:flex-end; gap:10px;
+    padding:0 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    background:none; border:none; pointer-events:none;
+  }
+  .nav-btn{
+    pointer-events:auto;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+    width:50px; height:50px; border-radius:50%;
+    background: var(--glass-bg-strong);
+    color:var(--text); font-family:'Nunito'; font-weight:800; font-size:9px;
+    cursor:pointer; position:relative;
+  }
+  .nav-btn svg{width:20px;height:20px;}
+  .nav-btn .nav-label{ display:none; }
+  .nav-btn.active{
+    color:#fff;
+    background: color-mix(in srgb, var(--accent) 82%, transparent);
+    border-color: rgba(255,255,255,0.5);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 10px 22px -8px var(--accent-strong);
+  }
+  .nav-dot{ position:absolute; top:1px; right:1px; width:9px;height:9px; border-radius:50%; background:var(--danger); border:1.5px solid var(--surface); }
+
+  .toast{ position:absolute; left:16px; right:16px; top:calc(var(--topbar-h, 96px) + 10px); background:var(--text); color:var(--bg); border-radius:14px; padding:10px 14px; font-weight:700; font-size:13px; text-align:center; box-shadow:var(--shadow); opacity:0; transform:translateY(-10px); transition:opacity .25s ease, transform .25s ease; pointer-events:none; z-index:30; }
+  .toast.show{opacity:1;transform:translateY(0);}
+
+  /* ---- tiroir des missions en verre ---- */
+  .missions-backdrop{ background:rgba(40,26,18,0.28); }
+  .missions-drawer{
+    background:var(--glass-bg);
+    backdrop-filter: blur(26px) saturate(190%) brightness(1.06);
+    -webkit-backdrop-filter: blur(26px) saturate(190%) brightness(1.06);
+    border:1px solid var(--glass-edge); border-bottom:none;
+    box-shadow: inset 0 1px 0 var(--glass-shine), 0 -12px 30px -14px rgba(0,0,0,0.35);
+  }
+  .missions-drawer .mission-card{
+    background:var(--glass-bg-strong); border-color:var(--glass-edge);
+    box-shadow: inset 0 1px 0 var(--glass-shine);
+  }
+  .missions-drawer .mission-card.urgent{ border-color:var(--danger); }
+  .missions-drawer .drawer-close{ background:var(--glass-bg-strong); border-color:var(--glass-edge); }
+  .missions-drawer .drawer-handle{ background:var(--glass-edge); }
+
+  /* ---- showroom (dressing) et coffre : fond marron + cartes en verre ---- */
+  #view-dressing, #view-coffre{
+    background: radial-gradient(120% 80% at 50% 0%, #7A5442 0%, #5A3B2C 55%, #3E281D 100%);
+    --brown-text:#FBEBDD; --brown-soft:rgba(251,235,221,0.72);
+    --glass-edge:rgba(255,255,255,0.28); --glass-shine:rgba(255,255,255,0.45);
+  }
+  #view-dressing .panel-title, #view-coffre .panel-title{ color:var(--brown-soft); }
+  #view-dressing .showroom, #view-dressing .outfit-card, #view-coffre .chest{
+    background:rgba(255,255,255,0.10);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border:1px solid var(--glass-edge);
+    box-shadow: inset 0 1px 0 var(--glass-shine), 0 10px 24px -12px rgba(0,0,0,0.5);
+  }
+  #view-dressing .outfit-card span{ color:var(--brown-text); }
+  #view-dressing .outfit-card.selected{ background:color-mix(in srgb, var(--accent) 32%, transparent); border-color:var(--accent); }
+  #view-coffre .chest{ background:linear-gradient(160deg, rgba(240,185,94,0.55), rgba(239,169,63,0.30)); }
+  #view-coffre .coffre-note{ color:var(--brown-soft); }
+
+  /* ---- toucher le chien (câlin / interrompre une bêtise) ---- */
+  .dog-sprite img{ pointer-events:auto; cursor:pointer; }
+  .hug-heart{
+    position:absolute; z-index:10; pointer-events:none;
+    color:#F07AA0; font-size:20px; line-height:1;
+    text-shadow:0 2px 6px rgba(0,0,0,0.25);
+    animation:hugFloat 1.4s ease-out forwards;
+  }
+  @keyframes hugFloat{
+    0%{ transform:translate(-50%,0) scale(.6); opacity:0; }
+    20%{ opacity:1; }
+    100%{ transform:translate(-50%,-70px) scale(1.15); opacity:0; }
+  }
+
+  /* ---- défis du jour (tiroir des missions) ---- */
+  .daily-head{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .daily-bonus{ font-size:11px; font-weight:800; color:var(--amber); }
+  #dailyList{ display:flex; flex-direction:column; gap:10px; }
+  .besoins-title{ margin-top:6px; }
+  .daily-bar{ height:6px; margin-top:6px; border-radius:99px; background:var(--glass-track); border:1px solid var(--glass-edge); overflow:hidden; }
+  .daily-bar > div{ height:100%; border-radius:99px; background:var(--amber); transition:width .4s ease; }
+  .daily-bar.big{ height:9px; }
+  .daily-bar.big > div{ background:var(--accent); }
+  .daily-count{ flex:none; font-weight:800; font-size:13px; color:var(--text-soft); min-width:40px; text-align:right; }
+  .mission-card.daily.claimed{ opacity:.6; }
+  .daily-claim{ background:var(--amber); }
+
+  /* ---- menu Plus, fiche, sauvegarde : même fond marron que le dressing ---- */
+  #view-plus, #view-fiche, #view-sauvegarde{
+    background: radial-gradient(120% 80% at 50% 0%, #7A5442 0%, #5A3B2C 55%, #3E281D 100%);
+    --brown-text:#FBEBDD; --brown-soft:rgba(251,235,221,0.72);
+    --glass-edge:rgba(255,255,255,0.28); --glass-shine:rgba(255,255,255,0.45);
+    color:var(--brown-text);
+  }
+  #view-plus .panel-title, #view-fiche .panel-title, #view-sauvegarde .panel-title{ color:var(--brown-soft); }
+  .glass-card, .plus-item{
+    background:rgba(255,255,255,0.10);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border:1px solid var(--glass-edge);
+    box-shadow: inset 0 1px 0 var(--glass-shine), 0 10px 24px -12px rgba(0,0,0,0.5);
+    border-radius:18px; padding:14px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .plus-item{ flex-direction:row; align-items:center; gap:12px; text-align:left; color:var(--brown-text); font-family:'Nunito'; cursor:pointer; }
+  .plus-item svg{ width:24px; height:24px; flex:none; color:var(--accent); }
+  .plus-item b{ display:block; font-size:15px; }
+  .plus-item small{ display:block; font-size:12px; color:var(--brown-soft); font-weight:700; }
+  .plus-item.soon{ opacity:.55; cursor:default; }
+  .back-btn{ align-self:flex-start; background:none; border:none; color:var(--brown-soft); font-family:'Nunito'; font-weight:800; font-size:14px; padding:4px 0; cursor:pointer; }
+  .fiche-title{ font-family:'Baloo 2'; font-weight:800; font-size:26px; color:var(--accent); line-height:1.1; }
+  .fiche-rename{ display:flex; gap:8px; }
+  .fiche-rename input, #view-sauvegarde textarea{
+    flex:1; min-width:0; font-family:'Nunito'; font-weight:700; font-size:16px; /* 16px : pas de zoom auto sur iPhone */
+    color:var(--brown-text); background:rgba(0,0,0,0.22); border:1px solid var(--glass-edge);
+    border-radius:11px; padding:8px 10px; outline:none;
+  }
+  #view-sauvegarde textarea{ font-size:12px; resize:none; width:100%; word-break:break-all; }
+  .fiche-level{ font-family:'Baloo 2'; font-weight:700; font-size:18px; }
+  .fiche-small{ font-size:12px; font-weight:700; color:var(--brown-soft); }
+  .fiche-trait{ font-size:13px; font-weight:700; }
+  .fiche-trait b{ color:var(--accent); }
+  .trait-row{ display:flex; align-items:center; gap:10px; font-size:12px; font-weight:800; }
+  .trait-row span{ width:86px; flex:none; color:var(--brown-soft); }
+  .trait-track{ flex:1; height:6px; border-radius:99px; background:rgba(0,0,0,0.25); overflow:hidden; }
+  .trait-track > div{ height:100%; background:var(--mint); border-radius:99px; transition:width .4s ease; }
+  .import-error{ font-size:12px; font-weight:800; color:#FFB4A6; min-height:14px; }
+  #view-sauvegarde .mission-btn, #view-fiche .mission-btn{ align-self:flex-start; }
+
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
